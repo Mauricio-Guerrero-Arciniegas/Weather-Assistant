@@ -1,0 +1,10 @@
+@import './base/variables';
+@import './layouts/app';
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: var(--transition);
+}
