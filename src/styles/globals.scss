@@ -1,6 +1,7 @@
 @use './variables' as *;
 @use './mixins' as *;
 @use './weatherBackgrounds';
+@use 'sass:color';
 
 :root {
   --text: #111;
@@ -54,71 +55,82 @@ body.dark {
 }
 
 .weather-box {
+  margin-top: 1rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
   align-items: center;
-  justify-content: center;
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-
-  .weather-left {
-    display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  }
-
-  .weather-right {
-    flex: 1;
-  }
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  color: inherit;
+  flex-wrap: nowrap;
 
   .weather-icon {
     width: 100px;
+    flex-shrink: 0;
   }
 
-  .thermometer {
-    width: 20px;
-  height: 100px;
-  background-color: #ccc;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
+  .weather-info {
+    flex: 1;
+    text-align: left;
 
-    .thermo-fill {
-   position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 0;
-  background-color: currentColor;
-  animation: fillThermo 3s ease forwards;
+    h2 {
+      margin-bottom: 0.5rem;
     }
-    
-    @keyframes fillThermo {
-  0% {
-    height: 0;
+
+    p {
+      margin: 0.3rem 0;
+    }
   }
-  100% {
-    height: var(--target-height, 0%);
-  }
-}
 
-  .weather-right {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: space-between;
-  flex: 1;
-}
+  .thermo-section {
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
 
+    .thermo-label {
+      font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    }
 
-    &.cold .thermo-fill {
+    .thermometer {
+       position: relative;
+    width: 20px;
+    height: 100px;
+    background-color: #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+
+      .thermo-fill {
+        position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0;
+      background-color: currentColor;
+      animation: fillThermo 4s ease forwards;
+      }
+
+      .thermo-scale {
+        position: absolute;
+      left: 28px;
+      top: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+        .scale-mark {
+          font-size: 0.75rem;
+        color: var(--text);
+        }
+      }
+
+      &.cold .thermo-fill {
       background: linear-gradient(to top, #00c6ff, #0072ff);
     }
 
@@ -129,6 +141,22 @@ body.dark {
     &.hot .thermo-fill {
       background: linear-gradient(to top, #ff3e00, #ff0000);
     }
+  }
+
+    @keyframes fillThermo {
+    0% {
+      height: 0;
+    }
+    100% {
+      height: var(--target-height, 0%);
+    }
+  }
+}
+
+  .weather-stats {
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+    text-align: left;
   }
 }
 
@@ -144,7 +172,7 @@ body.dark {
   padding: 0.5rem 0.8rem;
   margin: 0.4rem 0;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.76);
   backdrop-filter: blur(4px);
   color: var(--text);
   animation: fadeInMessage 0.6s ease;
@@ -165,32 +193,6 @@ body.dark {
   }
 }
 
-@media (max-width: 480px) {
-  .weather-box {
-    flex-direction: row;
-    padding: 1rem;
-    gap: 0.8rem;
-
-    .weather-icon {
-      width: 60px;
-      height: 60px;
-    }
-
-    .thermometer {
-      height: 60px;
-      width: 20px;
-    }
-
-    .weather-right p {
-      font-size: 0.85rem;
-    }
-
-    .weather-right h2 {
-      font-size: 1.1rem;
-    }
-  }
-}
-
 .unit-toggle {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -203,6 +205,149 @@ body.dark {
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: var(--primary-hover);
+    background-color: color.adjust(#0077ff, $lightness: -10%);
   }
+}
+
+.rain-alert {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: rgba(0, 123, 255, 0.15);
+  color: #0077ff;
+  border-left: 4px solid #0077ff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.forecast-box {
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  color: inherit;
+  transition: background 0.3s ease;
+
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .forecast-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .forecast-card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    width: 120px;
+    text-align: center;
+    font-size: 0.9rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+    color: inherit;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    img {
+      width: 60px;
+      height: 60px;
+    }
+
+    p {
+      margin: 0.3rem 0;
+    }
+  }
+}
+
+/* Dark mode overrides */
+body.dark {
+  .forecast-box {
+    background: rgba(0, 0, 0, 0.3);
+
+    .forecast-card {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-box {
+    flex-direction: column;
+    align-items: center;
+
+    .weather-icon {
+      width: 80px;
+    }
+
+    .thermometer {
+      height: 80px;
+    }
+
+    .weather-info {
+      text-align: center;
+    }
+
+    .weather-stats {
+      text-align: center;
+    }
+  }
+}
+
+body.loading {
+  overflow: hidden;
+}
+
+.pressure-card {
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  backdrop-filter: blur(6px);
+  color: inherit;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  animation: fadeInMessage 0.6s ease;
+
+  h3 {
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .pressure-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.5rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+body.dark .pressure-card {
+  background: rgba(0, 0, 0, 0.3);
 }
