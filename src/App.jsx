@@ -13,6 +13,7 @@ function App() {
   const [city, setCity] = useState('')
   const [units, setUnits] = useState('metric')
   const isCelsius = units === 'metric'
+  const [animationKey, setAnimationKey] = useState(0)
 
   const { location, error: geoError } = useGeoLocation()
   const {
@@ -53,6 +54,12 @@ function App() {
     }
   }, [location])
 
+  useEffect(() => {
+    if (data) {
+      setAnimationKey(prev => prev + 1)
+    }
+  }, [data])
+
   const mainWeather = data?.weather?.[0]?.main || ''
   const iconCode = data?.weather?.[0]?.icon || ''
   const weatherClass = data
@@ -65,7 +72,7 @@ function App() {
 
       <div className="app-container">
         <section className="content">
-          <h1>Clima en tu ciudad</h1>
+          <h1>Asistente del Clima </h1>
           <SearchBar city={city} setCity={setCity} onSearch={handleSearch} />
 
           <button onClick={handleToggleUnits} className="unit-toggle">
@@ -78,22 +85,26 @@ function App() {
 
           {data && (() => {
             const roundedTemp = Math.round(data.main.temp)
+            const roundedTempC = isCelsius
+              ? roundedTemp
+              : Math.round((roundedTemp - 32) * 5 / 9)
+
             let tempColorClass = ''
             let tempLabel = ''
             let tempMessage = ''
 
-            if (roundedTemp <= 12) {
+            if (roundedTempC <= 12) {
               tempColorClass = 'cold'
-              tempLabel = 'Frío ❄️'
-              tempMessage = 'Recomendación: abrigo, bufanda y gorro'
-            } else if (roundedTemp <= 25) {
+              tempLabel = 'Clima Frío ❄️'
+              tempMessage = 'Recomendación: Usar abrigo, bufanda y gorro'
+            } else if (roundedTempC <= 25) {
               tempColorClass = 'warm'
-              tempLabel = 'Templado 🌤️'
-              tempMessage = 'Recomendación: camiseta y chaqueta ligera'
+              tempLabel = 'Clima Templado 🌤️'
+              tempMessage = 'Recomendación: Usar camiseta y chaqueta ligera'
             } else {
               tempColorClass = 'hot'
-              tempLabel = 'Calor 🔥'
-              tempMessage = 'Recomendación: ropa fresca y gafas de sol'
+              tempLabel = 'Clima Calido 🔥'
+              tempMessage = 'Recomendación: Usar ropa fresca y gafas de sol'
             }
 
             return (
@@ -106,24 +117,29 @@ function App() {
                   />
                   <div className={`thermometer ${tempColorClass}`}>
                     <div
+                      key={animationKey}
                       className="thermo-fill"
                       style={{
-                        height: `${Math.min(roundedTemp, 50) * 2}%`,
-                        '--target-height': `${Math.min(roundedTemp, 50) * 2}%`,
+                        '--target-height': `${Math.min(roundedTempC, 50) * 2}%`,
                       }}
                     ></div>
                   </div>
                 </div>
 
                 <div className="weather-right">
-                  <h2>🌆 {data.name}, {data.sys.country}</h2>
-                  <p>🌡️ Temperatura: {roundedTemp}°{isCelsius ? 'C' : 'F'}</p>
-                  <p className="temp-label">{tempLabel}</p>
-                  <p className="temp-message">{tempMessage}</p>
-                  <p>🌦️ Condición: {data.weather[0].description}</p>
-                  <p>🌬️ Viento: {data.wind.speed} {isCelsius ? 'm/s' : 'mph'}</p>
-                  <p>☁️ Nubosidad: {data.clouds.all}%</p>
-                  <p>🧭 Presión: {data.main.pressure} hPa</p>
+                  <div className="weather-info">
+                    <h2>{data.name}, {data.sys.country}</h2>
+                    <p>🌡️ {roundedTemp}°{isCelsius ? 'C' : 'F'}</p>
+                    <p className="temp-label">{tempLabel}</p>
+                    <p className="temp-message">{tempMessage}</p>
+                    <p>🌦️ {data.weather[0].description}</p>
+                  </div>
+
+                  <div className="weather-stats">
+                    <p>🌬️ {data.wind.speed} {isCelsius ? 'm/s' : 'mph'}</p>
+                    <p>☁️ {data.clouds.all}% nubosidad</p>
+                    <p>🧭 {data.main.pressure} hPa</p>
+                  </div>
                 </div>
               </div>
             )
