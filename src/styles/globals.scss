@@ -1,0 +1,185 @@
+@use './variables' as *;
+@use './mixins' as *;
+@use './weatherBackgrounds';
+
+:root {
+  --text: #111;
+  --primary: #0077ff;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text);
+  background-color: var(--background);
+  transition: background-color 0.3s ease;
+  line-height: 1.5;
+}
+
+h1, h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+body.dark {
+  --text: #f1f1f1;
+  background-color: #121212;
+  color: var(--text);
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.content {
+  margin-top: 1rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.weather-box {
+  display: flex;
+  gap: 1rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 1.2rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  align-items: center;
+  max-width: 500px;
+  width: 100%;
+  transition: 0.3s ease;
+
+  .weather-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+  }
+
+  .weather-right {
+    flex: 1;
+  }
+
+  .weather-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .thermometer {
+    width: 24px;
+    height: 80px;
+    background: #ddd;
+    border-radius: 20px;
+    margin-top: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+
+    .thermo-fill {
+      position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius: 0 0 20px 20px;
+  animation: fillThermo 3s ease-out;
+    }
+
+    @keyframes fillThermo {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--target-height);
+  }
+}
+
+    &.cold .thermo-fill {
+      background: linear-gradient(to top, #00c6ff, #0072ff);
+    }
+
+    &.warm .thermo-fill {
+      background: linear-gradient(to top, #f7971e, #ffd200);
+    }
+
+    &.hot .thermo-fill {
+      background: linear-gradient(to top, #ff3e00, #ff0000);
+    }
+  }
+}
+
+.temp-label {
+  margin-top: 0.4rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.temp-message {
+  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem;
+  margin: 0.4rem 0;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  color: var(--text);
+  animation: fadeInMessage 0.6s ease;
+}
+
+.dark .temp-message {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-box {
+    flex-direction: row;
+    padding: 1rem;
+    gap: 0.8rem;
+
+    .weather-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .thermometer {
+      height: 60px;
+      width: 20px;
+    }
+
+    .weather-right p {
+      font-size: 0.85rem;
+    }
+
+    .weather-right h2 {
+      font-size: 1.1rem;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+.default-bg {
+  background: linear-gradient(to top, #dbe2ef, #f9f7f7);
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.dark .default-bg {
+  background: linear-gradient(to top, #1c1e26, #101217);
+}
+
+.sunny {
+  background: linear-gradient(to top, #fceabb, #f8b500);
+  min-height: 100vh;
+}
+
+.dark .sunny {
+  background: linear-gradient(to top, #4f4f4f, #222);
+}
+
+.rainy {
+  background: linear-gradient(to top, #cfd9df, #e2ebf0);
+  min-height: 100vh;
+}
+
+.dark .rainy {
+  background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+.cloudy {
+  background: linear-gradient(to top, #d7d2cc, #304352);
+  min-height: 100vh;
+}
+
+.dark .cloudy {
+  background: linear-gradient(to top, #1c1c1c, #2f2f2f);
+}
+
+.snowy {
+  background: linear-gradient(to top, #e0eafc, #cfdef3);
+  min-height: 100vh;
+}
+
+.dark .snowy {
+  background: linear-gradient(to top, #444, #222);
+}
+
+.thunder {
+  background: linear-gradient(to top, #1f1c2c, #928dab);
+  min-height: 100vh;
+}
+
+.dark .thunder {
+  background: linear-gradient(to top, #0f0f2e, #2c2c5a);
+}
+
+.clear-night {
+  background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+  min-height: 100vh;
+}
+
+.dark .clear-night {
+  background: linear-gradient(to top, #0b1c23, #172a3a, #1f3548);
+}
