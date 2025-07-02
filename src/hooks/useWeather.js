@@ -9,19 +9,18 @@ export function useWeather() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const getWeatherByCity = async (city) => {
+  const getWeatherByCity = async (city, units = 'metric') => {
     setLoading(true)
     setError(null)
-    setData(null)
 
     try {
       const response = await axios.get(BASE_URL, {
         params: {
           q: city,
           appid: API_KEY,
-          units: 'metric',
-          lang: 'es'
-        }
+          units,
+          lang: 'es',
+        },
       })
       setData(response.data)
     } catch (err) {
@@ -31,7 +30,7 @@ export function useWeather() {
     }
   }
 
-  const getWeatherByCoords = async (lat, lon) => {
+  const getWeatherByCoords = async (lat, lon, units = 'metric') => {
     setLoading(true)
     setError(null)
 
@@ -41,9 +40,9 @@ export function useWeather() {
           lat,
           lon,
           appid: API_KEY,
-          units: 'metric',
-          lang: 'es'
-        }
+          units,
+          lang: 'es',
+        },
       })
       setData(response.data)
     } catch (err) {
@@ -53,11 +52,5 @@ export function useWeather() {
     }
   }
 
-  return {
-    data,
-    loading,
-    error,
-    getWeatherByCity,
-    getWeatherByCoords
-  }
+  return { data, loading, error, getWeatherByCity, getWeatherByCoords }
 }

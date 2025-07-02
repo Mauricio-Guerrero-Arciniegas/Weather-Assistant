@@ -11,6 +11,9 @@ import './styles/weatherBackgrounds.scss'
 
 function App() {
   const [city, setCity] = useState('')
+  const [units, setUnits] = useState('metric') // 'metric' = °C, 'imperial' = °F
+  const isCelsius = units === 'metric'
+
   const { location, error: geoError } = useGeoLocation()
   const {
     data,
@@ -31,12 +34,22 @@ function App() {
 
   const handleSearch = (e) => {
     e.preventDefault()
-    if (city.trim()) getWeatherByCity(city)
+    if (city.trim()) getWeatherByCity(city, units)
+  }
+
+  const handleToggleUnits = () => {
+    const newUnits = isCelsius ? 'imperial' : 'metric'
+    setUnits(newUnits)
+    if (city.trim()) {
+      getWeatherByCity(city, newUnits)
+    } else if (location) {
+      getWeatherByCoords(location.lat, location.lon, newUnits)
+    }
   }
 
   useEffect(() => {
     if (location) {
-      getWeatherByCoords(location.lat, location.lon)
+      getWeatherByCoords(location.lat, location.lon, units)
     }
   }, [location])
 
@@ -55,30 +68,16 @@ function App() {
           <h1>Clima en tu ciudad</h1>
           <SearchBar city={city} setCity={setCity} onSearch={handleSearch} />
 
+          <button onClick={handleToggleUnits} className="unit-toggle">
+            Cambiar a °{isCelsius ? 'F' : 'C'}
+          </button>
+
           {geoError && <p>{geoError}</p>}
           {loading && <p>Cargando...</p>}
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
           {data && (() => {
             const roundedTemp = Math.round(data.main.temp)
-            let tempColorClass = ''
-            let tempLabel = ''
-            let tempMessage = ''
-
-            if (roundedTemp <= 12) {
-              tempColorClass = 'cold'
-              tempLabel = 'Frío ❄️'
-              tempMessage = '¡Hace frío! Recomendación: abrigo, bufanda y gorro'
-            } else if (roundedTemp <= 25) {
-              tempColorClass = 'warm'
-              tempLabel = 'Templado 🌤️'
-              tempMessage = 'Recomendación: camiseta y chaqueta ligera'
-            } else {
-              tempColorClass = 'hot'
-              tempLabel = 'Calor 🔥'
-              tempMessage = '¡Hace calor! Recomendación: ropa fresca y gafas de sol'
-            }
-
             return (
               <div className="weather-box">
                 <div className="weather-left">
@@ -87,23 +86,15 @@ function App() {
                     alt="Icono del clima"
                     className="weather-icon"
                   />
-                  <div className={`thermometer ${tempColorClass}`}>
-                  <div
-                    className="thermo-fill"
-                    style={{
-                      height: `${Math.min(roundedTemp, 50) * 2}%`,
-                      '--target-height': `${Math.min(roundedTemp, 50) * 2}%`,
-                    }}
-                  ></div>
-                </div>
                 </div>
 
                 <div className="weather-right">
-                  <h2>{data.name}</h2>
-                  <p>🌡️ Temperatura: {roundedTemp}°C</p>
-                  <p className="temp-label">{tempLabel}</p>
-                  <p className="temp-message">{tempMessage}</p>
-                  <p>Condiciones Actuales: {data.weather[0].description}</p>
+                  <h2>🌆 {data.name}, {data.sys.country}</h2>
+                  <p>🌡️ Temperatura: {roundedTemp}°{isCelsius ? 'C' : 'F'}</p>
+                  <p>🌦️ Condición: {data.weather[0].description}</p>
+                  <p>🌬️ Viento: {data.wind.speed} {isCelsius ? 'm/s' : 'mph'}</p>
+                  <p>☁️ Nubosidad: {data.clouds.all}%</p>
+                  <p>🧭 Presión: {data.main.pressure} hPa</p>
                 </div>
               </div>
             )
