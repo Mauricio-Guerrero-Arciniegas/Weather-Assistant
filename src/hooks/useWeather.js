@@ -12,6 +12,7 @@ export function useWeather() {
   const getWeatherByCity = async (city) => {
     setLoading(true)
     setError(null)
+    setData(null)
 
     try {
       const response = await axios.get(BASE_URL, {

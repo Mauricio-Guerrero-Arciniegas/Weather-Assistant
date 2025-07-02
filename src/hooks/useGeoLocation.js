@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useGeoLocation() {
   const [location, setLocation] = useState(null)
@@ -6,17 +6,19 @@ export function useGeoLocation() {
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError('La geolocalización no está disponible en este navegador.')
+      setError('Tu navegador no soporta geolocalización.')
       return
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords
-        setLocation({ lat: latitude, lon: longitude })
+        setLocation({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        })
       },
       () => {
-        setError('No se pudo obtener tu ubicación.')
+        setError('No se pudo obtener la ubicación.')
       }
     )
   }, [])
