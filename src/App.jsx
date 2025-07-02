@@ -11,7 +11,7 @@ import './styles/weatherBackgrounds.scss'
 
 function App() {
   const [city, setCity] = useState('')
-  const [units, setUnits] = useState('metric') // 'metric' = °C, 'imperial' = °F
+  const [units, setUnits] = useState('metric')
   const isCelsius = units === 'metric'
 
   const { location, error: geoError } = useGeoLocation()
@@ -78,6 +78,24 @@ function App() {
 
           {data && (() => {
             const roundedTemp = Math.round(data.main.temp)
+            let tempColorClass = ''
+            let tempLabel = ''
+            let tempMessage = ''
+
+            if (roundedTemp <= 12) {
+              tempColorClass = 'cold'
+              tempLabel = 'Frío ❄️'
+              tempMessage = 'Recomendación: abrigo, bufanda y gorro'
+            } else if (roundedTemp <= 25) {
+              tempColorClass = 'warm'
+              tempLabel = 'Templado 🌤️'
+              tempMessage = 'Recomendación: camiseta y chaqueta ligera'
+            } else {
+              tempColorClass = 'hot'
+              tempLabel = 'Calor 🔥'
+              tempMessage = 'Recomendación: ropa fresca y gafas de sol'
+            }
+
             return (
               <div className="weather-box">
                 <div className="weather-left">
@@ -86,11 +104,22 @@ function App() {
                     alt="Icono del clima"
                     className="weather-icon"
                   />
+                  <div className={`thermometer ${tempColorClass}`}>
+                    <div
+                      className="thermo-fill"
+                      style={{
+                        height: `${Math.min(roundedTemp, 50) * 2}%`,
+                        '--target-height': `${Math.min(roundedTemp, 50) * 2}%`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
 
                 <div className="weather-right">
                   <h2>🌆 {data.name}, {data.sys.country}</h2>
                   <p>🌡️ Temperatura: {roundedTemp}°{isCelsius ? 'C' : 'F'}</p>
+                  <p className="temp-label">{tempLabel}</p>
+                  <p className="temp-message">{tempMessage}</p>
                   <p>🌦️ Condición: {data.weather[0].description}</p>
                   <p>🌬️ Viento: {data.wind.speed} {isCelsius ? 'm/s' : 'mph'}</p>
                   <p>☁️ Nubosidad: {data.clouds.all}%</p>
