@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const API_KEY = 'e92a4cc0b70a7d1be6a0b4639edea54c' 
+const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY 
 
 export function useForecast() {
   const [forecast, setForecast] = useState([])

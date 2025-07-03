@@ -16,6 +16,16 @@ body {
   line-height: 1.5;
 }
 
+body.dark {
+  --text: #f1f1f1;
+  background-color: #121212;
+  color: var(--text);
+}
+
+body.loading {
+  overflow: hidden;
+}
+
 h1, h2 {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
@@ -32,17 +42,10 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-body.dark {
-  --text: #f1f1f1;
-  background-color: #121212;
-  color: var(--text);
-}
-
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   min-height: 100vh;
   padding: 2rem 1rem;
 }
@@ -57,7 +60,6 @@ body.dark {
 .weather-box {
   margin-top: 1rem;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.5rem;
@@ -88,75 +90,54 @@ body.dark {
 
   .thermo-section {
     display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
 
     .thermo-label {
       font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text);
+      font-weight: 600;
+      color: var(--text);
     }
 
     .thermometer {
-       position: relative;
-    width: 20px;
-    height: 100px;
-    background-color: #ccc;
-    border-radius: 10px;
-    overflow: hidden;
+      position: relative;
+      width: 20px;
+      height: 100px;
+      background-color: #ccc;
+      border-radius: 10px;
+      overflow: hidden;
 
       .thermo-fill {
         position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 0;
-      background-color: currentColor;
-      animation: fillThermo 4s ease forwards;
-      }
-
-      .thermo-scale {
-        position: absolute;
-      left: 28px;
-      top: 0;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-
-        .scale-mark {
-          font-size: 0.75rem;
-        color: var(--text);
-        }
+        bottom: 0;
+        width: 100%;
+        height: 0;
+        background-color: currentColor;
+        animation: fillThermo 4s ease forwards;
       }
 
       &.cold .thermo-fill {
-      background: linear-gradient(to top, #00c6ff, #0072ff);
-    }
+        background: linear-gradient(to top, #00c6ff, #0072ff);
+      }
 
-    &.warm .thermo-fill {
-      background: linear-gradient(to top, #f7971e, #ffd200);
-    }
+      &.warm .thermo-fill {
+        background: linear-gradient(to top, #f7971e, #ffd200);
+      }
 
-    &.hot .thermo-fill {
-      background: linear-gradient(to top, #ff3e00, #ff0000);
-    }
-  }
-
-    @keyframes fillThermo {
-    0% {
-      height: 0;
-    }
-    100% {
-      height: var(--target-height, 0%);
+      &.hot .thermo-fill {
+        background: linear-gradient(to top, #ff3e00, #ff0000);
+      }
     }
   }
 }
 
-  .weather-stats {
-    margin-top: 0.8rem;
-    font-size: 0.9rem;
-    text-align: left;
+@keyframes fillThermo {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: var(--target-height, 0%);
   }
 }
 
@@ -269,7 +250,6 @@ body.dark {
   }
 }
 
-/* Dark mode overrides */
 body.dark {
   .forecast-box {
     background: rgba(0, 0, 0, 0.3);
@@ -278,33 +258,10 @@ body.dark {
       background: rgba(0, 0, 0, 0.2);
     }
   }
-}
 
-@media (max-width: 480px) {
-  .weather-box {
-    flex-direction: column;
-    align-items: center;
-
-    .weather-icon {
-      width: 80px;
-    }
-
-    .thermometer {
-      height: 80px;
-    }
-
-    .weather-info {
-      text-align: center;
-    }
-
-    .weather-stats {
-      text-align: center;
-    }
+  .pressure-card {
+    background: rgba(0, 0, 0, 0.3);
   }
-}
-
-body.loading {
-  overflow: hidden;
 }
 
 .pressure-card {
@@ -348,6 +305,21 @@ body.loading {
   }
 }
 
-body.dark .pressure-card {
-  background: rgba(0, 0, 0, 0.3);
+@media (max-width: 480px) {
+  .weather-box {
+    flex-direction: column;
+    align-items: center;
+
+    .weather-icon {
+      width: 80px;
+    }
+
+    .thermometer {
+      height: 80px;
+    }
+
+    .weather-info {
+      text-align: center;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import styles from './SearchBar.module.scss'
-import { FiSearch } from 'react-icons/fi' // usando react-icons (liviano y simple)
+import { FiSearch } from 'react-icons/fi'
 
 function SearchBar({ city, setCity, onSearch }) {
   return (

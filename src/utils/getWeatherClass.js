@@ -8,5 +8,5 @@ export function getWeatherClass(main, icon = '') {
   if (weather.includes('thunder')) return 'thunder'
   if (weather.includes('snow')) return 'snowy'
 
-  return 'sunny' // valor por defecto
+  return 'sunny' 
 }
